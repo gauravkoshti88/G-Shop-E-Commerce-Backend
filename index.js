@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv'
 import dbConnect from "./config/db.js";
+import authRouter from "./routes/user/auth.routes.js";
 dotenv.config()
 
 const app = express()
@@ -12,7 +13,10 @@ app.get("/",(req, res)=>{
     res.send("Server Running ✅")
 })
 
+// main routes
+app.use("/api/auth", authRouter);
+
 app.listen(port,()=>{
-    dbConnect()
+    dbConnect();
     console.log(`Server is running at http://localhost:${port}`);
 })
