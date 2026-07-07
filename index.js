@@ -6,7 +6,7 @@ import authRouter from "./routes/user/auth.routes.js";
 import userRouter from "./routes/user/user.routes.js";
 import adminAuthRouter from "./routes/admin/admin.auth.routes.js";
 import adminRouter from "./routes/admin/admin.routes.js";
-// import { hashedPassword } from "./controllers/admin/admin.auth.controller.js";
+import categoryRouter from "./routes/admin/category.routes.js";
 dotenv.config()
 
 const app = express()
@@ -23,6 +23,9 @@ app.get("/", (req, res) => {
 // admin routes
 app.use("/api/admin-auth", adminAuthRouter);
 app.use("/api/admin", adminRouter);
+
+// admin category routes
+app.use("/api/admin", categoryRouter);
 
 // user routes
 app.use("/api/auth", authRouter);

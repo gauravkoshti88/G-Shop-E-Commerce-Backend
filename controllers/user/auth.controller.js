@@ -11,24 +11,28 @@ export const userRegister = async (req, res) => {
 
         if (existUser) {
             return res.status(409).json({
+                success: false,
                 message: `User with email ${email} already exists.`
             })
         }
 
         if (!firstName || !lastName || !email || !password || !phone) {
             return res.status(400).json({
+                success: false,
                 message: "Required all fields are required"
             })
         }
 
         if (password.length < 8) {
             return res.status(400).json({
+                success: false,
                 message: "Password must be at least 8 characters long."
             })
         }
 
         if (!validator.isEmail(email)) {
             return res.status(400).json({
+                success: false,
                 message: "Invalid email format."
             });
         }
@@ -56,6 +60,7 @@ export const userRegister = async (req, res) => {
         delete userObj.password;
 
         return res.status(201).json({
+            success: true,
             message: "User Register Successfully ✅",
             user: {
                 firstName,
@@ -67,6 +72,7 @@ export const userRegister = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: `User Register Error ${error}`
         })
     }
@@ -80,12 +86,14 @@ export const userLogin = async (req, res) => {
 
         if (!existUser) {
             return res.status(409).json({
+                success: false,
                 message: `User with email ${email} does not exists.`
             })
         }
 
         if (!email || !password) {
             return res.status(400).json({
+                success: false,
                 message: "Email and password are required."
             });
         }
@@ -94,6 +102,7 @@ export const userLogin = async (req, res) => {
 
         if (!comparePassword) {
             return res.status(400).json({
+                success: false,
                 message: "Password mismatch"
             })
         }
@@ -111,12 +120,14 @@ export const userLogin = async (req, res) => {
         delete userObj.password;
 
         return res.status(200).json({
+            success: true,
             message: "User Login Successfully ✅",
             userObj
         })
 
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: `User Login Error ${error}`
         })
     }
@@ -131,10 +142,12 @@ export const userLogout = async (req, res) => {
         });
 
         return res.status(200).json({
+            success: true,
             message: "User logged out successfully"
         });
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: `User Logout Error ${error}`
         })
     }

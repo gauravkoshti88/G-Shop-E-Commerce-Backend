@@ -6,6 +6,7 @@ export const userAuth = (req, res, next)=>{
 
         if(!token){
             return res.status(401).json({
+                success: false,
                 message:"User does not have a token"
             })
         }
@@ -14,6 +15,7 @@ export const userAuth = (req, res, next)=>{
 
         if(!verifyToken){
             return res.status(401).json({
+                success: false,
                 message: "User does not have a valid token"
             })
         }
@@ -23,6 +25,7 @@ export const userAuth = (req, res, next)=>{
         next()
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: `User Authentication Error ${error}`
         })
     }
@@ -34,6 +37,7 @@ export const adminAuth = (req, res, next)=>{
 
         if(!token){
             return res.status(401).json({
+                success: false,
                 message:"Admin does not have a token"
             })
         }
@@ -42,6 +46,7 @@ export const adminAuth = (req, res, next)=>{
 
         if(!verifyToken){
             return res.status(401).json({
+                success: false,
                 message: "Admin does not have a valid token"
             })
         }
@@ -51,6 +56,7 @@ export const adminAuth = (req, res, next)=>{
         next()
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: `Admin Authentication Error ${error}`
         })
     }

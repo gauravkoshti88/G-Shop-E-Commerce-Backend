@@ -1,6 +1,6 @@
 import bycrpt from 'bcrypt'
-import Admin from "../../models/admin/adminModel.js";
 import { adminToken, genrateToken } from '../../config/token.js';
+import Admin from '../../models/admin/adminSchema.js';
 
 // export const hashedPassword = async() =>{
 //     const password = "Gk881771@";
@@ -14,6 +14,7 @@ export const adminLogin = async (req, res) => {
 
         if (!email || !password) {
             return res.status(400).json({
+                success:false,
                 message: "Email and password are required."
             });
         }
@@ -22,6 +23,7 @@ export const adminLogin = async (req, res) => {
 
         if (!admin) {
             return res.status(404).json({
+                success:false,
                 message: "Admin account not found"
             });
         }
@@ -31,6 +33,7 @@ export const adminLogin = async (req, res) => {
 
         if (!comparePassword) {
             return res.status(400).json({
+                success:false,
                 message: "Password mismatch"
             })
         }
@@ -48,11 +51,13 @@ export const adminLogin = async (req, res) => {
         delete adminObj.password;
 
         return res.status(200).json({
+            success:true,
             message: "Admin Login Successfully ✅",
             adminObj
         })
     } catch (error) {
         return res.status(500).json({
+            success:false,
             error: `Admin Login Error ${error}`
         })
     }
@@ -67,10 +72,12 @@ export const adminLogout = async (req, res) => {
         });
 
         return res.status(200).json({
+            success:true,
             message: "Admin logged out successfully"
         });
     } catch (error) {
         return res.status(500).json({
+            success:false,
             error: `Admin Logout Error ${error}`
         })
     }
