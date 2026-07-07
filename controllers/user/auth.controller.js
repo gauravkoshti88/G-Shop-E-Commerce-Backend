@@ -45,7 +45,7 @@ export const userRegister = async (req, res) => {
 
         const token = genrateToken(newUser._id);
 
-        res.cookie("token", token, {
+        res.cookie("userToken", token, {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
@@ -66,7 +66,6 @@ export const userRegister = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("User Register Error", error);
         return res.status(500).json({
             error: `User Register Error ${error}`
         })
@@ -101,7 +100,7 @@ export const userLogin = async (req, res) => {
 
         const token = genrateToken(existUser._id);
 
-        res.cookie("token", token, {
+        res.cookie("userToken", token, {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
@@ -117,9 +116,26 @@ export const userLogin = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("User Register Error", error);
         return res.status(500).json({
-            error: `User Register Error ${error}`
+            error: `User Login Error ${error}`
+        })
+    }
+}
+
+export const userLogout = async (req, res) => {
+    try {
+        res.clearCookie("userToken", {
+            httpOnly: true,
+            secure: false, 
+            sameSite: "strict"
+        });
+
+        return res.status(200).json({
+            message: "User logged out successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: `User Logout Error ${error}`
         })
     }
 }

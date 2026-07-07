@@ -1,22 +1,34 @@
 import express from "express";
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv'
 import dbConnect from "./config/db.js";
 import authRouter from "./routes/user/auth.routes.js";
+import userRouter from "./routes/user/user.routes.js";
+import adminAuthRouter from "./routes/admin/admin.auth.routes.js";
+import adminRouter from "./routes/admin/admin.routes.js";
+// import { hashedPassword } from "./controllers/admin/admin.auth.controller.js";
 dotenv.config()
 
 const app = express()
 const port = process.env.PORT
-app.use(express.json())
+
+app.use(express.json());
+app.use(cookieParser());
 
 // test route
-app.get("/",(req, res)=>{
+app.get("/", (req, res) => {
     res.send("Server Running ✅")
 })
 
-// main routes
-app.use("/api/auth", authRouter);
+// admin routes
+app.use("/api/admin-auth", adminAuthRouter);
+app.use("/api/admin", adminRouter);
 
-app.listen(port,()=>{
+// user routes
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+
+app.listen(port, () => {
     dbConnect();
     console.log(`Server is running at http://localhost:${port}`);
 })
