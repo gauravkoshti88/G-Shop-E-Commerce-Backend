@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Category from "../../models/admin/categorySchema.js";
-import { updateCloudinaryImage, uploadToCloudinary } from "../../utils/cloudinaryFunc.js";
+import { deleteFromCloudinary, updateCloudinaryImage, uploadToCloudinary } from "../../utils/cloudinaryFunc.js";
 
 export const addCategory = async (req, res) => {
     try {
@@ -166,6 +166,89 @@ export const updateCategory = async (req, res) => {
         return res.status(500).json({
             success: false,
             error: `Update Category Error ${error}`
+        })
+    }
+}
+
+export const updateCategoryStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid Category Id'
+            });
+        }
+
+        const category = await Category.findById(id);
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found"
+            })
+        }
+
+        if (category.status == status) {
+            return res.status(400).json({
+                success: false,
+                message: `Status already ${status}`
+            })
+        }
+
+        if (status) category.status = status;
+
+        await category.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Status Update Successfully',
+            category
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: `Update Category Status Error ${error}`
+        })
+    }
+}
+
+export const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid Category Id'
+            });
+        }
+
+        const category = await Category.findById(id);
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found"
+            })
+        }
+
+        if (category.image.public_id) {
+            await deleteFromCloudinary(category.image.public_id);
+        }
+
+        await Category.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Category Delete Successfully'
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: `Delete Category Error ${error}`
         })
     }
 }
