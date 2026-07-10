@@ -2,12 +2,6 @@ import bycrpt from 'bcrypt'
 import { adminToken, genrateToken } from '../../config/token.js';
 import Admin from '../../models/admin/adminSchema.js';
 
-// export const hashedPassword = async() =>{
-//     const password = "Gk881771@";
-//     const hashed = await bycrpt.hash(password, 10);
-//     console.log(hashed);
-// }
-
 export const adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -56,6 +50,8 @@ export const adminLogin = async (req, res) => {
             adminObj
         })
     } catch (error) {
+        console.log(error);
+        
         return res.status(500).json({
             success:false,
             error: `Admin Login Error ${error}`

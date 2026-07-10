@@ -71,16 +71,16 @@ export const addSubCategory = async (req, res) => {
 
 export const getSubCategoryByCategory = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { categoryId } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!mongoose.Types.ObjectId.isValid(categoryId)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Category Id"
             })
         }
 
-        const category = await Category.findById(id);
+        const category = await Category.findById(categoryId);
 
         if (!category) {
             return res.status(404).json({
@@ -89,7 +89,7 @@ export const getSubCategoryByCategory = async (req, res) => {
             })
         }
 
-        const subCategory = await SubCategory.find({ category: id }).sort({ createdAt: -1 }).populate("category")
+        const subCategory = await SubCategory.find({ category: categoryId }).sort({ createdAt: -1 }).populate("category")
 
         return res.status(200).json({
             success: true,
